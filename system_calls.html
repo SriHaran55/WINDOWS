@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>System Calls</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Zeyada&amp;display=swap'>
+  <link rel="stylesheet" href='system_calls_styles.css'>
+  <style>
+    .Container {
+      height: 400px; /* Adjust height as needed */
+      overflow-y: auto;
+      width: 75%;
+      margin: 0 auto; /* Center the container */
+    }
+
+    .store {
+      color: rgb(251, 148, 57);
+    }
+
+    .copy-container {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .copy-button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #2980b9;
+    }
+
+    pre {
+      margin: 0;
+    }
+
+    code {
+      display: block;
+      background-color: #2d2d2d;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="menu">
+    <a href="index.html">
+      <span class="outter">
+        <span class="inner">HOME</span>
+      </span>
+    </a>
+    <a href="features.html">
+      <span class="outter">
+        <span class="inner">FEATURES</span>
+      </span>
+    </a>
+    <a href="commands.html">
+      <span class="outter">
+        <span class="inner">COMMANDS</span>
+      </span>
+    </a>
+    <a href="system_calls.html">
+      <span class="outter">
+        <span class="inner">SYSTEM CALLS</span>
+      </span>
+    </a>
+    <a href="process_synchro.html">
+      <span class="outter">
+        <span class="inner">SCHEDULING ALGO</span>
+      </span>
+    </a>
+    <a href="memory.html">
+      <span class="outter">
+        <span class="inner">MEMORY ALGO</span>
+      </span>
+    </a>
+    <a href="disk_schedule.html">
+      <span class="outter">
+        <span class="inner">DISK SCHEDULE</span>
+      </span>
+    </a>
+  </div>
+  <script>
+    let curs = document.querySelector(".cursor");
+
+    document.addEventListener("mousemove", (e) => {
+      let x = e.pageX;
+      let y = e.pageY;
+      curs.style.left = x - 50 + "px";
+      curs.style.top = y - 50 + "px";
+    });
+
+    let menuEls = document.querySelectorAll(".menu a");
+    menuEls.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        setTimeout(() => {
+          curs.classList.add("cursor-fade");
+        }, 300);
+      });
+
+      el.addEventListener("mouseleave", () => {
+        curs.classList.remove("cursor-fade");
+      });
+    });
+  </script>
+</header>
+<h1 style="color: white; font: small-caps;">System Calls Of Windows</h1>
+<div class="cursor"></div>
+<div class="Container">
+  <div class="store">
+    <div class="copy-container">
+      <p>1. CreateFile: <br>
+        - Description: Creates, opens, or truncates a file or device and returns a handle that can be used to access the file or device. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code1')">Copy Code</button>
+    </div>
+    <pre><code id="code1" class="cpp">HANDLE CreateFile(
+  LPCTSTR lpFileName,
+  DWORD dwDesiredAccess,
+  DWORD dwShareMode,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  DWORD dwCreationDisposition,
+  DWORD dwFlagsAndAttributes,
+  HANDLE hTemplateFile
+);</code></pre>
+
+    <div class="copy-container">
+      <p>2. ReadFile: <br>
+        - Description: Reads data from the specified file or device into a buffer. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code2')">Copy Code</button>
+    </div>
+    <pre><code id="code2" class="cpp">BOOL ReadFile(
+  HANDLE hFile,
+  LPVOID lpBuffer,
+  DWORD nNumberOfBytesToRead,
+  LPDWORD lpNumberOfBytesRead,
+  LPOVERLAPPED lpOverlapped
+);</code></pre>
+
+    <div class="copy-container">
+      <p>3. WriteFile: <br>
+        - Description: Writes data from a buffer to the specified file or device. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code3')">Copy Code</button>
+    </div>
+    <pre><code id="code3" class="cpp">BOOL WriteFile(
+  HANDLE hFile,
+  LPCVOID lpBuffer,
+  DWORD nNumberOfBytesToWrite,
+  LPDWORD lpNumberOfBytesWritten,
+  LPOVERLAPPED lpOverlapped
+);</code></pre>
+
+    <div class="copy-container">
+      <p>4. CloseHandle: <br>
+        - Description: Closes an open object handle. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code4')">Copy Code</button>
+    </div>
+    <pre><code id="code4" class="cpp">BOOL CloseHandle(
+  HANDLE hObject
+);</code></pre>
+
+    <div class="copy-container">
+      <p>5. CreateProcess: <br>
+        - Description: Creates a new process and its primary thread. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code5')">Copy Code</button>
+    </div>
+    <pre><code id="code5" class="cpp">BOOL CreateProcess(
+  LPCTSTR lpApplicationName,
+  LPTSTR lpCommandLine,
+  LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  BOOL bInheritHandles,
+  DWORD dwCreationFlags,
+  LPVOID lpEnvironment,
+  LPCTSTR lpCurrentDirectory,
+  LPSTARTUPINFO lpStartupInfo,
+  LPPROCESS_INFORMATION lpProcessInformation
+);</code></pre>
+
+    <div class="copy-container">
+      <p>6. CreateThread: <br>
+        - Description: Creates a new thread for execution within the calling process. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code6')">Copy Code</button>
+    </div>
+    <pre><code id="code6" class="cpp">HANDLE CreateThread(
+  LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  SIZE_T dwStackSize,
+  LPTHREAD_START_ROUTINE lpStartAddress,
+  LPVOID lpParameter,
+  DWORD dwCreationFlags,
+  LPDWORD lpThreadId
+);</code></pre>
+
+    <div class="copy-container">
+      <p>7. VirtualAlloc: <br>
+        - Description: Reserves, commits, or reserves and commits a region of memory within the virtual address space of a specified process. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code7')">Copy Code</button>
+    </div>
+    <pre><code id="code7" class="cpp">LPVOID VirtualAlloc(
+  LPVOID lpAddress,
+  SIZE_T dwSize,
+  DWORD flAllocationType,
+  DWORD flProtect
+);</code></pre>
+
+    <div class="copy-container">
+      <p>8. VirtualFree: <br>
+        - Description: Releases, decommits, or releases and decommits a region of memory within the virtual address space of a specified process. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code8')">Copy Code</button>
+    </div>
+    <pre><code id="code8" class="cpp">BOOL VirtualFree(
+  LPVOID lpAddress,
+  SIZE_T dwSize,
+  DWORD dwFreeType
+);</code></pre>
+
+    <div class="copy-container">
+      <p>9. CreateMutex: <br>
+        - Description: Creates or opens a named or unnamed mutex object. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code9')">Copy Code</button>
+    </div>
+    <pre><code id="code9" class="cpp">HANDLE CreateMutex(
+  LPSECURITY_ATTRIBUTES lpMutexAttributes,
+  BOOL bInitialOwner,
+  LPCTSTR lpName
+);</code></pre>
+
+    <div class="copy-container">
+      <p>10. WaitForSingleObject: <br>
+        - Description: Waits until the specified object is in the signaled state or the time-out interval elapses. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code10')">Copy Code</button>
+    </div>
+    <pre><code id="code10" class="cpp">DWORD WaitForSingleObject(
+  HANDLE hHandle,
+  DWORD dwMilliseconds
+);</code></pre>
+
+    <div class="copy-container">
+      <p>11. ReleaseMutex: <br>
+        - Description: Releases ownership of the specified mutex object. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code11')">Copy Code</button>
+    </div>
+    <pre><code id="code11" class="cpp">BOOL ReleaseMutex(
+  HANDLE hMutex
+);</code></pre>
+
+    <div class="copy-container">
+      <p>12. RegOpenKeyEx: <br>
+        - Description: Opens the specified registry key for reading or writing. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code12')">Copy Code</button>
+    </div>
+    <pre><code id="code12" class="cpp">LONG RegOpenKeyEx(
+  HKEY hKey,
+  LPCTSTR lpSubKey,
+  DWORD ulOptions,
+  REGSAM samDesired,
+  PHKEY phkResult
+);</code></pre>
+
+    <div class="copy-container">
+      <p>13. RegQueryValueEx: <br>
+        - Description: Retrieves the type and data for a specified value name associated with an open registry key. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code13')">Copy Code</button>
+    </div>
+    <pre><code id="code13" class="cpp">LONG RegQueryValueEx(
+  HKEY hKey,
+  LPCTSTR lpValueName,
+  LPDWORD lpReserved,
+  LPDWORD lpType,
+  LPBYTE lpData,
+  LPDWORD lpcbData
+);</code></pre>
+
+    <div class="copy-container">
+      <p>14. RegSetValueEx: <br>
+        - Description: Sets the data and type of a specified value under a registry key. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code14')">Copy Code</button>
+    </div>
+    <pre><code id="code14" class="cpp">LONG RegSetValueEx(
+  HKEY hKey,
+  LPCTSTR lpValueName,
+  DWORD Reserved,
+  DWORD dwType,
+  const BYTE lpData,
+  DWORD cbData
+);</code></pre>
+
+    <div class="copy-container">
+      <p>15. ConnectNamedPipe: <br>
+        - Description: Waits for a client to connect to a named pipe. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code15')">Copy Code</button>
+    </div>
+    <pre><code id="code15" class="cpp">BOOL ConnectNamedPipe(
+  HANDLE hNamedPipe,
+  LPOVERLAPPED lpOverlapped
+);</code></pre>
+
+    <div class="copy-container">
+      <p>16. DisconnectNamedPipe: <br>
+        - Description: Disconnects the server end of a named pipe instance from a client process. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code16')">Copy Code</button>
+    </div>
+    <pre><code id="code16" class="cpp">BOOL DisconnectNamedPipe(
+  HANDLE hNamedPipe
+);</code></pre>
+
+    <div class="copy-container">
+      <p>17. SendMessage: <br>
+        - Description: Sends the specified message to a window or windows. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code17')">Copy Code</button>
+    </div>
+    <pre><code id="code17" class="cpp">LRESULT SendMessage(
+  HWND hWnd,
+  UINT Msg,
+  WPARAM wParam,
+  LPARAM lParam
+);</code></pre>
+
+    <div class="copy-container">
+      <p>18. PostMessage: <br>
+        - Description: Places a message in the message queue associated with the thread that created the specified window. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code18')">Copy Code</button>
+    </div>
+    <pre><code id="code18" class="cpp">BOOL PostMessage(
+  HWND hWnd,
+  UINT Msg,
+  WPARAM wParam,
+  LPARAM lParam
+);</code></pre>
+
+    <div class="copy-container">
+      <p>19. GetTickCount: <br>
+        - Description: Retrieves the number of milliseconds that have elapsed since the system was started. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code19')">Copy Code</button>
+    </div>
+    <pre><code id="code19" class="cpp">DWORD GetTickCount();</code></pre>
+
+    <div class="copy-container">
+      <p>20. Sleep: <br>
+        - Description: Suspends the execution of the current thread for a specified interval. <br>
+        - Syntax:</p>
+      <button class="copy-button" onclick="copyCode('code20')">Copy Code</button>
+    </div>
+    <pre><code id="code20" class="cpp">void Sleep(
+  DWORD dwMilliseconds
+);</code></pre>
+  </div>
+</div>
+
+<svg>
+  <filter id="filth">
+    <feTurbulence x="0" y="0" baseFrequency="2" numOctaves="100" seed="44">
+      <animate attributeName="baseFrequency" dur="0.5s" values="0.1;0.005;0.05" repeatCount="indefinite">
+      </animate>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" scale="20">
+    </feDisplacementMap>
+  </filter>
+</svg>
+<!-- partial -->
+<script src="./script.js"></script>
+<script>
+  function copyCode(id) {
+    var codeBlock = document.getElementById(id).innerText;
+    var tempTextArea = document.createElement('textarea');
+    tempTextArea.value = codeBlock;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempTextArea);
+    alert('Code copied to clipboard!');
+  }
+</script>
+<section class="info-section"></section>
+</body>
+</html>

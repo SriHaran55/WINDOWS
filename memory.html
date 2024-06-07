@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Zeyada&amp;display=swap'>
+  <link rel="stylesheet" href="memory_style.css">
+  <style>
+    .Container {
+      height: 400px; /* Adjust height as needed */
+      overflow-y: auto;
+      width: 75%;
+    }
+
+    .store {
+        color: rgb(54, 141, 254);
+    }
+
+    .run-button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #36a1fe;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .run-button:hover {
+      background-color: #2581c4;
+    }
+  </style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<header>
+    <div class="menu">
+        <a href="index.html">
+            <span class="outter">
+                <span class="inner">HOME</span>
+            </span>
+        </a>
+        <a href="features.html">
+            <span class="outter">
+                <span class="inner">FEATURES</span>
+            </span>
+        </a>
+        <a href="commands.html">
+            <span class="outter">
+                <span class="inner">COMMANDS</span>
+            </span>
+        </a>
+        <a href="system_calls.html">
+            <span class="outter">
+                <span class="inner">SYSTEM CALLS</span>
+            </span>
+        </a>
+        <a href="process_synchro.html">
+            <span class="outter">
+                <span class="inner">SCHEDULING ALGO</span>
+            </span>
+        </a>
+        <a href="memory.html">
+          <span class="outter">
+              <span class="inner">MEMORY ALGO</span>
+          </span>
+      </a>
+      <a href="disk_schedule.html">
+        <span class="outter">
+            <span class="inner">DISK SCHEDULE</span>
+        </span>
+      </a>
+    </div>
+    <script>
+      let curs = document.querySelector(".cursor");
+
+      document.addEventListener("mousemove", (e) => {
+          let x = e.pageX;
+          let y = e.pageY;
+          curs.style.left = x - 50 + "px";
+          curs.style.top = y - 50 + "px";
+      });
+
+      let menuEls = document.querySelectorAll(".menu a");
+      menuEls.forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+              setTimeout(() => {
+                  curs.classList.add("cursor-fade");
+              }, 300);
+          });
+
+          el.addEventListener("mouseleave", () => {
+              curs.classList.remove("cursor-fade");
+          });
+      });
+    </script>
+</header>
+<h1 style="color: white;font: small-caps;">Memory Allocation Program</h1>
+<section>
+  </section>
+<div class="cursor"></div>
+
+<div class="Container">
+    <div class="store" id="code-block">
+        <button class="run-button" onclick="runCode()">#Run</button>
+        <br><br>
+        <p>class MemoryBlock:<br>&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, start, size):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.start = start<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.size = size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.allocated = False<br><br>class MemoryAllocator:<br>&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, total_memory):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.total_memory = total_memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.memory_blocks = [MemoryBlock(0, total_memory)]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;def allocate_memory(self, size):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best_fit_block = None<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for block in self.memory_blocks:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if not block.allocated and block.size >= size:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if best_fit_block is None or block.size < best_fit_block.size:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best_fit_block = block<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if best_fit_block is None:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("Error: No suitable memory block found for allocation.")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return None<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if best_fit_block.size > size:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_block = MemoryBlock(best_fit_block.start + size, best_fit_block.size - size)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.memory_blocks.append(new_block)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best_fit_block.size = size<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best_fit_block.allocated = True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return best_fit_block<br><br>&nbsp;&nbsp;&nbsp;&nbsp;def deallocate_memory(self, block):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block_index = self.memory_blocks.index(block)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.memory_blocks[block_index].allocated = False<br><br>def main():<br>&nbsp;&nbsp;&nbsp;&nbsp;total_memory = int(input("Enter the total memory available: "))<br>&nbsp;&nbsp;&nbsp;&nbsp;allocator = MemoryAllocator(total_memory)<br><br>&nbsp;&nbsp;&nbsp;&nbsp;while True:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action = input("Enter 'a' to allocate memory, 'd' to deallocate memory, or 'q' to quit: ").strip().lower()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if action == 'a':<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size = int(input("Enter the size of memory to allocate: "))<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block = allocator.allocate_memory(size)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if block:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"Memory allocated at address: {block.start}, size: {block.size}")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif action == 'd':<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start = int(input("Enter the start address of the memory block to deallocate: "))<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block_to_deallocate = None<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for block in allocator.memory_blocks:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if block.start == start and block.allocated:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block_to_deallocate = block<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if block_to_deallocate:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocator.deallocate_memory(block_to_deallocate)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"Memory deallocated at address: {block_to_deallocate.start}, size: {block_to_deallocate.size}")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("Error: No allocated block found at the given address.")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif action == 'q':<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("Invalid action. Please enter 'a' to allocate, 'd' to deallocate, or 'q' to quit.")<br><br>if __name__ == "__main__":<br>&nbsp;&nbsp;&nbsp;&nbsp;main()</p>
+    </div>
+</div>
+
+
+<svg>
+    <filter id="filth">
+        <feTurbulence x="0" y="0" baseFrequency="2" numOctaves="100" seed="44">
+            <animate attributeName="baseFrequency" dur="0.5s" values="0.1;0.005;0.05" repeatCount="indefinite">
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="20">
+    </filter>
+</svg>
+<!-- partial -->
+  <script src="script.js"></script>
+
+  <section class="info-section"></section>
+
+  <script>
+    function runCode() {
+      let codeBlock = document.getElementById('code-block').innerText;
+      codeBlock = codeBlock.replace(/ /g, ' '); // Replace all non-breaking spaces with regular spaces
+      const textarea = document.createElement('textarea');
+      textarea.value = codeBlock;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert('Code copied to clipboard!');
+      window.location.href = 'https://www.onlinegdb.com/';
+    }
+  </script>
+  
+</body>
+</html>

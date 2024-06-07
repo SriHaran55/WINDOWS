@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Process Scheduling</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Zeyada&display=swap'>
+  <link rel="stylesheet" href="process_synchro_style.css">
+  <style>
+    .Container {
+      height: 400px; /* Adjust height as needed */
+      overflow-y: auto;
+      width: 75%;
+    }
+
+    .store {
+      color: rgb(54, 141, 254);
+    }
+
+    .copy-button {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="menu">
+    <a href="index.html">
+      <span class="outter">
+        <span class="inner">HOME</span>
+      </span>
+    </a>
+    <a href="features.html">
+      <span class="outter">
+        <span class="inner">FEATURES</span>
+      </span>
+    </a>
+    <a href="commands.html">
+      <span class="outter">
+        <span class="inner">COMMANDS</span>
+      </span>
+    </a>
+    <a href="system_calls.html">
+      <span class="outter">
+        <span class="inner">SYSTEM CALLS</span>
+      </span>
+    </a>
+    <a href="process_synchro.html">
+      <span class="outter">
+        <span class="inner">SCHEDULING ALGO</span>
+      </span>
+    </a>
+    <a href="memory.html">
+      <span class="outter">
+        <span class="inner">MEMORY ALGO</span>
+      </span>
+    </a>
+    <a href="disk_schedule.html">
+      <span class="outter">
+        <span class="inner">DISK SCHEDULE</span>
+      </span>
+    </a>
+  </div>
+</header>
+<h1 style="color: white; font: small-caps;">Process Scheduling Program</h1>
+<div class="cursor"></div>
+
+<div class="Container">
+  <div class="store" id="codeBlock">
+    <br><br>
+    <button class="copy-button" onclick="runCode()" href="https://www.onlinegdb.com/" >#RUN</button>
+    <pre>
+      class Process:
+          def __init__(self, name, arrival_time, burst_time):
+              self.name = name
+              self.arrival_time = arrival_time
+              self.burst_time = burst_time
+              self.remaining_time = burst_time
+              self.start_time = None
+              self.end_time = None
+      
+      class MultilevelFeedbackQueue:
+          def __init__(self, processes):
+              self.processes = processes
+              self.queues = {
+                  0: [],  # Queue with highest priority
+                  1: [],  # Queue with medium priority
+                  2: []   # Queue with lowest priority
+              }
+              self.gantt_chart = []
+              self.waiting_times = {}
+              self.turnaround_times = {}
+      
+          def schedule(self):
+              current_time = 0
+              while any(process.remaining_time > 0 for process in self.processes):
+                  # Move processes to the appropriate queues
+                  for process in self.processes:
+                      if (process.arrival_time <= current_time and 
+                          process not in self.queues[0] and 
+                          process not in self.queues[1] and 
+                          process not in self.queues[2] and 
+                          process.remaining_time > 0):
+                          if process.remaining_time <= 2:
+                              self.queues[0].append(process)
+                          elif process.remaining_time <= 4:
+                              self.queues[1].append(process)
+                          else:
+                              self.queues[2].append(process)
+      
+                  # Schedule processes based on priority queues
+                  for priority in sorted(self.queues.keys()):
+                      queue = self.queues[priority]
+                      if queue:
+                          if priority == 0:
+                              self.round_robin(queue, current_time)
+                          elif priority == 1:
+                              self.shortest_job_first(queue, current_time)
+                          else:
+                              self.first_come_first_served(queue, current_time)
+                          break
+      
+                  # Update the current time and remove completed processes
+                  current_time += 1
+                  self.remove_completed_processes()
+      
+              # Calculate average waiting time and turnaround time
+              total_waiting_time = 0
+              total_turnaround_time = 0
+              for process in self.processes:
+                  waiting_time = process.end_time - process.arrival_time - process.burst_time
+                  turnaround_time = process.end_time - process.arrival_time
+                  self.waiting_times[process.name] = waiting_time
+                  self.turnaround_times[process.name] = turnaround_time
+                  total_waiting_time += waiting_time
+                  total_turnaround_time += turnaround_time
+      
+              average_waiting_time = total_waiting_time / len(self.processes)
+              average_turnaround_time = total_turnaround_time / len(self.processes)
+      
+              return average_waiting_time, average_turnaround_time
+      
+          def remove_completed_processes(self):
+              for queue in self.queues.values():
+                  for process in queue[:]:  # Iterate over a copy of the list
+                      if process.remaining_time <= 0:
+                          process.end_time = len(self.gantt_chart)
+                          queue.remove(process)
+      
+          def round_robin(self, queue, current_time):
+              for process in queue[:]:  # Copy the queue to avoid modification during iteration
+                  self.gantt_chart.append((process.name, current_time, 0))
+                  if process.start_time is None:
+                      process.start_time = current_time
+                  print(f"Executing process {process.name} at time {current_time} with remaining time {process.remaining_time}")
+                  if process.remaining_time <= 2:
+                      current_time += process.remaining_time
+                      process.remaining_time = 0
+                      print(f"Execution {process.name} Completed")
+                      queue.remove(process)
+                  else:
+                      current_time += 2
+                      process.remaining_time -= 2
+      
+          def shortest_job_first(self, queue, current_time):
+              while queue:
+                  shortest_process = min(queue, key=lambda x: x.remaining_time)
+                  self.gantt_chart.append((shortest_process.name, current_time, 1))
+                  if shortest_process.start_time is None:
+                      shortest_process.start_time = current_time
+                  print(f"Executing process {shortest_process.name} at time {current_time} with remaining time {shortest_process.remaining_time}")
+                  if shortest_process.remaining_time <= 2:
+                      current_time += shortest_process.remaining_time
+                      shortest_process.remaining_time = 0
+                      queue.remove(shortest_process)
+                  else:
+                      current_time += 2
+                      shortest_process.remaining_time -= 2
+      
+          def first_come_first_served(self, queue, current_time):
+              for process in queue[:]:  # Copy the queue to avoid modification during iteration
+                  self.gantt_chart.append((process.name, current_time, 2))
+                  if process.start_time is None:
+                      process.start_time = current_time
+                  print(f"Executing process {process.name} at time {current_time} with remaining time {process.remaining_time}")
+                  if process.remaining_time <= 2:
+                      current_time += process.remaining_time
+                      process.remaining_time = 0
+                      queue.remove(process)
+                  else:
+                      current_time += 2
+                      process.remaining_time -= 2
+      
+          def display_gantt_chart(self):
+              print("\nGantt Chart:")
+              print("-" * 70)
+              chart = ""
+              timeline = ""
+              for i, (process_name, start_time, priority) in enumerate(self.gantt_chart):
+                  if i == 0 or start_time != self.gantt_chart[i-1][1]:
+                      chart += f"| {process_name}(P{priority}) "
+                      timeline += f"{start_time}    "
+                  else:
+                      chart += "  "
+                      timeline += "     "
+              chart += f"|"
+              if self.gantt_chart:
+                  timeline += f"{self.gantt_chart[-1][1] + 2}"
+              print(chart)
+              print(timeline)
+              print("-" * 70)
+      
+      def get_user_input():
+          processes = []
+          num_processes = int(input("Enter the number of processes: "))
+          for i in range(num_processes):
+              name = input(f"Enter name for process {i+1}: ")
+              arrival_time = int(input(f"Enter arrival time for process {name}: "))
+              burst_time = int(input(f"Enter burst time for process {name}: "))
+              processes.append(Process(name, arrival_time, burst_time))
+          return processes
+      
+      if __name__ == "__main__":
+          processes = get_user_input()
+          scheduler = MultilevelFeedbackQueue(processes)
+          avg_waiting_time, avg_turnaround_time = scheduler.schedule()
+          scheduler.display_gantt_chart()
+          print(f"Average Waiting Time: {avg_waiting_time:.2f}")
+          print(f"Average Turnaround Time: {avg_turnaround_time:.2f}")
+      </pre>
+      
+  </div>
+</div>
+
+<script>
+  function runCode() {
+    let codeBlock = document.getElementById('codeBlock').innerText;
+    codeBlock = codeBlock.replace(/ /g, ' '); // Replace all non-breaking spaces with regular spaces
+    const textarea = document.createElement('textarea');
+    textarea.value = codeBlock;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('Code copied to clipboard!');
+    window.location.href = 'https://www.onlinegdb.com/';
+  }
+</script>
+</body>
+</html>

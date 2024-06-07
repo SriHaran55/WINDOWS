@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Windows Command</title>
+</head>
+<body>
+    <input type="text" id="commandInput" placeholder="Enter a Windows command">
+    <button onclick="runCommand()">Run Command</button>
+    <pre id="output"></pre>
+
+    <script>
+        function runCommand() {
+            const command = document.getElementById('commandInput').value;
+            const outputElement = document.getElementById('output');
+
+            try {
+                const shell = new ActiveXObject('WScript.Shell');
+                const execResult = shell.Exec(command);
+
+                while (!execResult.StdOut.AtEndOfStream) {
+                    outputElement.textContent += execResult.StdOut.ReadLine() + '\n';
+                }
+            } catch (error) {
+                outputElement.textContent = 'Error running command: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

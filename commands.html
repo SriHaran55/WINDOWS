@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Commands</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Zeyada&amp;display=swap'>
+  <link rel="stylesheet" href="commands_style.css">
+  <style>
+    .Container {
+      height: 400px; /* Adjust height as needed */
+      overflow-y: auto;
+      width: 75%;
+      margin: 0 auto; /* Center the container */
+    }
+
+    .store {
+      color: rgb(251, 148, 57);
+    }
+
+    .copy-container {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .copy-button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="menu">
+    <a href="index.html">
+      <span class="outter">
+        <span class="inner">HOME</span>
+      </span>
+    </a>
+    <a href="features.html">
+      <span class="outter">
+        <span class="inner">FEATURES</span>
+      </span>
+    </a>
+    <a href="commands.html">
+      <span class="outter">
+        <span class="inner">COMMANDS</span>
+      </span>
+    </a>
+    <a href="system_calls.html">
+      <span class="outter">
+        <span class="inner">SYSTEM CALLS</span>
+      </span>
+    </a>
+    <a href="process_synchro.html">
+      <span class="outter">
+        <span class="inner">SCHEDULING ALGO</span>
+      </span>
+    </a>
+    <a href="memory.html">
+      <span class="outter">
+        <span class="inner">MEMORY ALGO</span>
+      </span>
+    </a>
+    <a href="disk_schedule.html">
+      <span class="outter">
+        <span class="inner">DISK SCHEDULE</span>
+      </span>
+    </a>
+  </div>
+  <script>
+    let curs = document.querySelector(".cursor");
+
+    document.addEventListener("mousemove", (e) => {
+      let x = e.pageX;
+      let y = e.pageY;
+      curs.style.left = x - 50 + "px";
+      curs.style.top = y - 50 + "px";
+    });
+
+    let menuEls = document.querySelectorAll(".menu a");
+    menuEls.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        setTimeout(() => {
+          curs.classList.add("cursor-fade");
+        }, 300);
+      });
+
+      el.addEventListener("mouseleave", () => {
+        curs.classList.remove("cursor-fade");
+      });
+    });
+  </script>
+</header>
+<h1 style="color: white; font: small-caps;">Commands of WINDOWS</h1>
+<div class="cursor"></div>
+<div class="Container">
+  <div class="store">
+    <div class="copy-container">
+      <p>1. dir: Lists the contents of a directory.</p>
+      <button class="copy-button" onclick="copyText('dir: Lists the contents of a directory.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>2. cd: Changes the current directory.</p>
+      <button class="copy-button" onclick="copyText('cd: Changes the current directory.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>3. copy: Copies files from one location to another.</p>
+      <button class="copy-button" onclick="copyText('copy: Copies files from one location to another.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>4. move: Moves files from one location to another.</p>
+      <button class="copy-button" onclick="copyText('move: Moves files from one location to another.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>5. del: Deletes files.</p>
+      <button class="copy-button" onclick="copyText('del: Deletes files.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>6. mkdir: Creates a new directory.</p>
+      <button class="copy-button" onclick="copyText('mkdir: Creates a new directory.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>7. rmdir: Removes a directory.</p>
+      <button class="copy-button" onclick="copyText('rmdir: Removes a directory.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>8. ren: Renames a file or directory.</p>
+      <button class="copy-button" onclick="copyText('ren: Renames a file or directory.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>9. type: Displays the contents of a text file.</p>
+      <button class="copy-button" onclick="copyText('type: Displays the contents of a text file.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>10. echo: Prints text to the console.</p>
+      <button class="copy-button" onclick="copyText('echo: Prints text to the console.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>11. cls: Clears the command prompt screen.</p>
+      <button class="copy-button" onclick="copyText('cls: Clears the command prompt screen.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>12. ipconfig: Displays network configuration information.</p>
+      <button class="copy-button" onclick="copyText('ipconfig: Displays network configuration information.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>13. ping: Tests connectivity to another network device.</p>
+      <button class="copy-button" onclick="copyText('ping: Tests connectivity to another network device.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>14. netstat: Displays network statistics.</p>
+      <button class="copy-button" onclick="copyText('netstat: Displays network statistics.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>15. tasklist: Lists all currently running processes.</p>
+      <button class="copy-button" onclick="copyText('tasklist: Lists all currently running processes.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>16. taskkill: Terminates a process by process ID or image name.</p>
+      <button class="copy-button" onclick="copyText('taskkill: Terminates a process by process ID or image name.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>17. shutdown: Shuts down or restarts the computer.</p>
+      <button class="copy-button" onclick="copyText('shutdown: Shuts down or restarts the computer.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>18. systeminfo: Displays system information.</p>
+      <button class="copy-button" onclick="copyText('systeminfo: Displays system information.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>19. sfc: Scans and repairs system files.</p>
+      <button class="copy-button" onclick="copyText('sfc: Scans and repairs system files.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>20. chkdsk: Checks a disk for errors and repairs them if possible.</p>
+      <button class="copy-button" onclick="copyText('chkdsk: Checks a disk for errors and repairs them if possible.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>21. attrib: Displays or changes file attributes.</p>
+      <button class="copy-button" onclick="copyText('attrib: Displays or changes file attributes.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>22. diskpart: Manages disk partitions.</p>
+      <button class="copy-button" onclick="copyText('diskpart: Manages disk partitions.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>23. format: Formats a disk for use with Windows.</p>
+      <button class="copy-button" onclick="copyText('format: Formats a disk for use with Windows.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>24. xcopy: Copies files and directories with extended options.</p>
+      <button class="copy-button" onclick="copyText('xcopy: Copies files and directories with extended options.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>25. robocopy: Robust file copy utility with advanced options.</p>
+      <button class="copy-button" onclick="copyText('robocopy: Robust file copy utility with advanced options.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>26. shutdown: Shuts down or restarts the computer.</p>
+      <button class="copy-button" onclick="copyText('shutdown: Shuts down or restarts the computer.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>27. schtasks: Manages scheduled tasks.</p>
+      <button class="copy-button" onclick="copyText('schtasks: Manages scheduled tasks.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>28. regedit: Opens the Windows Registry Editor.</p>
+      <button class="copy-button" onclick="copyText('regedit: Opens the Windows Registry Editor.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>29. regsvr32: Registers or unregisters DLL files in the Windows Registry.</p>
+      <button class="copy-button" onclick="copyText('regsvr32: Registers or unregisters DLL files in the Windows Registry.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>30. gpedit.msc: Opens the Group Policy Editor.</p>
+      <button class="copy-button" onclick="copyText('gpedit.msc: Opens the Group Policy Editor.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>31. msconfig: Opens the System Configuration utility.</p>
+      <button class="copy-button" onclick="copyText('msconfig: Opens the System Configuration utility.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>32. devmgmt.msc: Opens Device Manager.</p>
+      <button class="copy-button" onclick="copyText('devmgmt.msc: Opens Device Manager.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>33. diskmgmt.msc: Opens Disk Management utility.</p>
+      <button class="copy-button" onclick="copyText('diskmgmt.msc: Opens Disk Management utility.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>34. control: Opens the Control Panel.</p>
+      <button class="copy-button" onclick="copyText('control: Opens the Control Panel.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>35. calc: Opens the Windows Calculator.</p>
+      <button class="copy-button" onclick="copyText('calc: Opens the Windows Calculator.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>36. notepad: Opens Notepad text editor.</p>
+      <button class="copy-button" onclick="copyText('notepad: Opens Notepad text editor.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>37. mspaint: Opens Microsoft Paint.</p>
+      <button class="copy-button" onclick="copyText('mspaint: Opens Microsoft Paint.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>38. mstsc: Opens Remote Desktop Connection.</p>
+      <button class="copy-button" onclick="copyText('mstsc: Opens Remote Desktop Connection.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>39. taskmgr: Opens Task Manager.</p>
+      <button class="copy-button" onclick="copyText('taskmgr: Opens Task Manager.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>40. services.msc: Opens the Services management console.</p>
+      <button class="copy-button" onclick="copyText('services.msc: Opens the Services management console.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>41. dism: Deployment Image Servicing and Management tool for Windows image maintenance.</p>
+      <button class="copy-button" onclick="copyText('dism: Deployment Image Servicing and Management tool for Windows image maintenance.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>42. driverquery: Displays a list of all installed device drivers.</p>
+      <button class="copy-button" onclick="copyText('driverquery: Displays a list of all installed device drivers.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>43. powercfg: Manages power settings and configurations.</p>
+      <button class="copy-button" onclick="copyText('powercfg: Manages power settings and configurations.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>44. fsutil: Performs various file system tasks.</p>
+      <button class="copy-button" onclick="copyText('fsutil: Performs various file system tasks.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>45. bcdedit: Manages Boot Configuration Data (BCD) settings.</p>
+      <button class="copy-button" onclick="copyText('bcdedit: Manages Boot Configuration Data (BCD) settings.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>46. eventvwr: Opens the Event Viewer.</p>
+      <button class="copy-button" onclick="copyText('eventvwr: Opens the Event Viewer.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>47. sigverif: Opens the File Signature Verification tool.</p>
+      <button class="copy-button" onclick="copyText('sigverif: Opens the File Signature Verification tool.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>48. verifier: Opens Driver Verifier Manager.</p>
+      <button class="copy-button" onclick="copyText('verifier: Opens Driver Verifier Manager.')">Copy Command</button>
+    </div>
+    <div class="copy-container">
+      <p>49. perfmon: Opens the Performance Monitor.</p>
+      <button class="copy-button" onclick="copyText('perfmon: Opens the Performance Monitor.')">Copy Command</button>
+    </div>
+  </div>
+</div>
+
+<svg>
+  <filter id="filth">
+    <feTurbulence x="0" y="0" baseFrequency="2" numOctaves="100" seed="44">
+      <animate attributeName="baseFrequency" dur="0.5s" values="0.1;0.005;0.05" repeatCount="indefinite">
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" scale="20">
+    </feDisplacementMap>
+  </filter>
+</svg>
+<script>
+  function copyText(text) {
+    var tempTextArea = document.createElement('textarea');
+    tempTextArea.value = text;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempTextArea);
+    alert('Command copied to clipboard!');
+  }
+</script>
+<section class="info-section"></section>
+</body>
+</html>

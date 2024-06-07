@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printing Machine Queue Simulation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: #00FF00;
+            margin: 0;
+            padding: 20px;
+        }
+        .buffer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            height: 100px;
+            border: 2px solid #333;
+            background-color: #1a1a1a;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .item {
+            width: 40px;
+            height: 40px;
+            background-color: #00FF00;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin: 0 5px;
+            border-radius: 4px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .item:hover {
+            transform: scale(1.1);
+        }
+        .empty {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #00FF00;
+        }
+        .waiting-buffer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            height: 100px;
+            border: 2px solid #333;
+            background-color: #333;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #00FF00;
+        }
+        .message {
+            font-weight: bold;
+            margin: 20px;
+            font-size: 1.1em;
+            color: #00FF00;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .controls input,
+        .controls button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 1em;
+            border-radius: 4px;
+            border: 1px solid #00FF00;
+            background-color: #000;
+            color: #00FF00;
+        }
+        .controls button {
+            background-color: #00FF00;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .controls button:hover {
+            background-color: #00cc00;
+        }
+        .controls label {
+            margin-right: 10px;
+            color: #00FF00;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <a style="text-decoration: none;" href="index.html">
+                <span class="outter">
+                    <span class="inner" style="color: white;font-size: xx-large;text-decoration: none;">HOME</span>
+                </span>
+            </a>
+        </div>
+    </header>
+    <div class="label">Main Queue</div>
+    <div class="buffer" id="mainBuffer">
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+    </div>
+    <div class="label">Waiting Queue</div>
+    <div class="waiting-buffer" id="waitingBuffer">
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+        <div class="item empty"></div>
+    </div>
+    <div class="message" id="processMessage"></div>
+    <div class="controls">
+        <div>
+            <label for="inputItem">Enter task name:</label>
+            <input type="text" id="inputItem">
+        </div>
+        <div>
+            <label for="inputSize">Enter task size:</label>
+            <input type="number" id="inputSize" min="1">
+        </div>
+        <div>
+            <button onclick="addTask()">Add Task</button>
+            <button onclick="processTasks()">Process Task</button>
+        </div>
+    </div>
+
+    <script>
+        const mainQueue = Array(10).fill(null);
+        const waitingQueue = [];
+        let processCount = 0;
+        let isProcessing = false;
+
+        function addTask() {
+            const taskName = document.getElementById('inputItem').value;
+            const taskSize = parseInt(document.getElementById('inputSize').value, 10);
+            if (taskName && taskSize > 0) {
+                const process = { name: taskName, id: ++processCount, size: taskSize };
+                if (mainQueue.includes(null)) {
+                    const index = mainQueue.indexOf(null);
+                    mainQueue[index] = process;
+                } else {
+                    waitingQueue.push(process);
+                }
+                updateBuffer();
+            }
+        }
+
+        async function processTasks() {
+            if (isProcessing) return;
+            isProcessing = true;
+            while (mainQueue.some(task => task !== null)) {
+                const currentProcess = mainQueue[0];
+                if (currentProcess !== null) {
+                    document.getElementById('processMessage').textContent = `${currentProcess.name} process is being executed with a burst time ${currentProcess.size}`;
+                    await blinkProcess(currentProcess.size);
+                    mainQueue.shift();
+                    mainQueue.push(null);
+                    if (waitingQueue.length > 0) {
+                        const nextProcess = waitingQueue.shift();
+                        mainQueue[mainQueue.indexOf(null)] = nextProcess;
+                    }
+                    document.getElementById('processMessage').textContent = '';
+                    updateBuffer();
+                }
+            }
+            isProcessing = false;
+        }
+
+        function blinkProcess(blinkCount) {
+            return new Promise((resolve) => {
+                const item = document.querySelector('#mainBuffer .item:not(.empty)');
+                let count = 0;
+                const interval = setInterval(() => {
+                    item.classList.toggle('empty');
+                    if (++count === blinkCount * 2) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 500);
+            });
+        }
+
+        function updateBuffer() {
+            const mainBufferItems = document.querySelectorAll('#mainBuffer .item');
+            mainBufferItems.forEach((item, index) => {
+                if (mainQueue[index] === null) {
+                    item.textContent = '';
+                    item.classList.add('empty');
+                } else {
+                    item.textContent = `P${mainQueue[index].id}`;
+                    item.classList.remove('empty');
+                }
+            });
+
+            const waitingBufferItems = document.querySelectorAll('#waitingBuffer .item');
+            waitingBufferItems.forEach((item, index) => {
+                if (waitingQueue[index] === undefined) {
+                    item.textContent = '';
+                    item.classList.add('empty');
+                } else {
+                    item.textContent = `P${waitingQueue[index].id}`;
+                    item.classList.remove('empty');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
